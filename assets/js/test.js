@@ -7,8 +7,8 @@ let playerMoney = 10;
 
 let enemyNames = ["Salem", "Kitty", "Pumpkin"];
 
-const enemyAttack = 12;
-let enemyHealth = 50;
+let enemyAttack = randomNumber(11, 10);
+let enemyHealth;
 
 let battle = function (playerName, enemyNames) {
   while (playerHealth > 0 && enemyHealth > 0) {
@@ -16,7 +16,7 @@ let battle = function (playerName, enemyNames) {
     if (promptFight === "skip" || promptFight === "SKIP") {
       let confirmSkip = confirm("Do you really wish to skip?");
       if (confirmSkip) {
-        playerMoney--;
+        playerMoney = Math.max(0, playerMoney - 7)
         console.log(playerMoney);
         console.log("The player will skip");
         shop();
@@ -24,7 +24,7 @@ let battle = function (playerName, enemyNames) {
       }
     }
 
-    enemyHealth -= playerAttack;
+    enemyHealth = Math.max(0, enemyHealth - enemyAttack) // It will return whatever is the highest number, and 0 always being a choice it will never go down to the negatives
     console.log(
       `${playerName} hit ${enemyNames} for ${playerAttack} leaving ${enemyNames} with ${enemyHealth}`
     );
@@ -33,11 +33,13 @@ let battle = function (playerName, enemyNames) {
 
     if (enemyHealth <= 0) {
       console.log(`${enemyNames} has been defeated`);
+      playerMoney += 10
+      console.log(playerMoney)
       shop();
       break;
     }
 
-    playerHealth -= enemyAttack;
+    playerHealth = Math.max(0, playerHealth - enemyAttack) // Same with enemyHealth, the value will never be negative
     console.log(
       `${enemyNames} hit ${playerName} for ${enemyAttack} leaving ${playerName} with ${playerHealth}`
     );
@@ -63,7 +65,8 @@ let startGame = function (playerName, enemyNames) {
       alert(`Let the battle begin! Round ${i + 1}`);
       let currentEnemy = enemyNames[i];
 
-      enemyHealth = 50;
+      enemyHealth = randomNumber(); 
+      console.log(enemyHealth)
 
       battle(playerName, currentEnemy);
     } else {
@@ -106,8 +109,8 @@ let shop = function () {
 
   switch (shopOptions) {
     case "attack":
-      if (playerMoney >= 2) {
-        playerMoney -= 2;
+      if (playerMoney >= 5) {
+        playerMoney = Math.max(0, playerMoney - 5);
         playerAttack += 2;
       } else {
         alert("'You can't afford that!")
@@ -117,11 +120,11 @@ let shop = function () {
       console.log(`money ${playerMoney}, ${playerAttack}`);
       break;
     case "potion":
-      if (playerMoney >= 2) {
-        playerMoney -= 2;
+      if (playerMoney >= 5) {
+        playerMoney = Math.max(0, playerMoney - 5);
         playerHealth += 2;
       } else {
-        alert("You can't afford that!")
+        alert("You can't afford that!");
         shop();
       }
 
@@ -133,5 +136,11 @@ let shop = function () {
       shop();
   }
 };
+
+let randomNumber = function(min, max) {
+  let value = Math.floor(Math.random() * (max - min + 1) + min); //floor will always round the number down to a whole number while round will either do up or down. And adding '+ 40' at the end will make the default value 40 even when the random number hits 0
+    //ex. Math.floor(Math.random() * (60 - 40 + 1) + 40)
+  return value
+}
 
 startGame(playerName, enemyNames);
