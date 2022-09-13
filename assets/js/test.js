@@ -1,7 +1,5 @@
-const playerName = prompt("What is your name?");
-console.log(`Fighters name is ${playerName}`);
-
 let playerInfo = {
+  name: prompt("What is your name?"),
   health: 100,
   attack: 10,
   money: 10,
@@ -47,7 +45,7 @@ console.log(enemy1);
 
 let enemies = [enemy1, enemy2, enemy2];
 
-let battle = function (playerName, enemies) {
+let battle = function (playerInfo, enemies) {
   while (playerInfo.health > 0 && enemies.health > 0) {
     const promptFight = prompt("Do you want to FIGHT or SKIP");
     if (promptFight === "skip" || promptFight === "SKIP") {
@@ -63,7 +61,7 @@ let battle = function (playerName, enemies) {
 
     enemies.health = Math.max(0, enemies.health - playerInfo.attack); // It will return whatever is the highest number, and 0 always being a choice it will never go down to the negatives
     console.log(
-      `${playerName} hit ${enemies.name} for ${playerInfo.attack} leaving ${enemies.name} with ${enemies.health}`
+      `${playerInfo.name} hit ${enemies.name} for ${playerInfo.attack} leaving ${enemies.name} with ${enemies.health}`
     );
 
     console.log(enemies.health);
@@ -78,7 +76,7 @@ let battle = function (playerName, enemies) {
 
     playerInfo.health = Math.max(0, playerInfo.health - enemies.attack); // Same with enemyHealth, the value will never be negative
     console.log(
-      `${enemies.name} hit ${playerName} for ${enemies.attack} leaving ${playerName} with ${playerInfo.health}`
+      `${enemies.name} hit ${playerInfo.name} for ${enemies.attack} leaving ${playerInfo.name} with ${playerInfo.health}`
     );
 
     console.log(playerInfo.health);
@@ -92,8 +90,10 @@ let battle = function (playerName, enemies) {
   }
 };
 
-let startGame = function (playerName, enemies) {
+let startGame = function (playerInfo, enemies) {
   playerInfo.reset();
+
+  console.log(`Fighters name is ${playerInfo.name}`);
 
   for (i = 0; i < enemies.length; i++) {
     if (playerInfo.health > 0) {
@@ -106,7 +106,7 @@ let startGame = function (playerName, enemies) {
         `${enemies[i].name} has ${enemies[i].health} health and ${enemies[i].attack} attack`
       );
 
-      battle(playerName, currentEnemy);
+      battle(playerInfo, currentEnemy);
     } else {
       alert("You have died");
       endGame();
@@ -124,7 +124,7 @@ let endGame = function () {
     );
     let restartPrompt = confirm("Would you like to play again?");
     if (restartPrompt) {
-      startGame(playerName, enemies);
+      startGame(playerInfo, enemies);
     } else {
       alert("Thanks for playing!");
     }
@@ -133,7 +133,7 @@ let endGame = function () {
     let restartPrompt = confirm("Would you like to play again?");
 
     if (restartPrompt) {
-      startGame(playerName, enemies);
+      startGame(playerInfo, enemies);
     } else {
       alert("Thanks for playing!");
     }
@@ -147,11 +147,11 @@ let shop = function () {
 
   switch (shopOptions) {
     case "attack":
-      playerInfo.upgradeAttack()
+      playerInfo.upgradeAttack();
       console.log(`money ${playerInfo.money}, ${playerInfo.attack}`);
       break;
     case "potion":
-      playerInfo.upgradeHealth()
+      playerInfo.upgradeHealth();
       console.log(`money ${playerInfo.money}, ${playerInfo.health}`);
       break;
     case "leave":
@@ -167,4 +167,4 @@ function randomNumber(min, max) {
   return value;
 }
 
-startGame(playerName, enemies);
+startGame(playerInfo, enemies);
