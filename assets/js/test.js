@@ -154,6 +154,16 @@ let endGame = function () {
     alert(
       `You survived the game! Your score is how much money you earned. And you have earned...${playerInfo.money}!!`
     );
+
+    let score = playerInfo.money + playerInfo.health
+    let scoreStorage = localStorage.setItem("score", score)
+    let scoreName = localStorage.setItem("name", playerInfo.name)
+
+    scoreStorage = localStorage.getItem('score')
+    scoreName = localStorage.getItem('name')
+
+    console.log(`${scoreName} has achieved the score of ${scoreStorage}`)
+
     let restartPrompt = confirm("Would you like to play again?");
     if (restartPrompt) {
       startGame(playerInfo, enemies);
@@ -162,8 +172,10 @@ let endGame = function () {
     }
   } else {
     alert("You have died! Game over.");
-    let restartPrompt = confirm("Would you like to play again?");
 
+    localStorage.setItem("score", playerInfo.money + playerInfo.health)
+
+    let restartPrompt = confirm("Would you like to play again?");
     if (restartPrompt) {
       startGame(playerInfo, enemies);
     } else {
