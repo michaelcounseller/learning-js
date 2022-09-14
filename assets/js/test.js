@@ -1,5 +1,14 @@
+let playerName = function () {
+  nameValue = prompt("What is your name magical one?");
+  while (!nameValue) {
+    playerName();
+  }
+
+  return nameValue;
+};
+
 let playerInfo = {
-  name: prompt("What is your name?"),
+  name: playerName(),
   health: 100,
   attack: 10,
   money: 10,
@@ -43,20 +52,32 @@ let enemy3 = new Enemy("Pumpkin", randomNumber(11, 10), randomNumber(60, 40));
 
 console.log(enemy1);
 
-let enemies = [enemy1, enemy2, enemy2];
+let enemies = [enemy1, enemy2, enemy3];
+
+let fightOrSkip = function () {
+  let promptVal = prompt("Would you like to FIGHT or SKIP");
+  promptVal = promptVal.toLowerCase();
+
+  if (promptVal === "" || promptVal === null) {
+    window.alert("You need to provide a valid answer! Please try again.");
+    // use return to call it again and stop the rest of this function from running
+    return fightOrSkip();
+  }
+
+  if (promptVal === "skip") {
+    let confirmPromp = confirm("Are you sure you want to SKIP?");
+    if (confirmPromp) {
+      alert("The player has skipped");
+      shop();
+      return true;
+    }
+  }
+};
 
 let battle = function (playerInfo, enemies) {
-  while (playerInfo.health > 0 && enemies.health > 0) {
-    const promptFight = prompt("Do you want to FIGHT or SKIP");
-    if (promptFight === "skip" || promptFight === "SKIP") {
-      let confirmSkip = confirm("Do you really wish to skip?");
-      if (confirmSkip) {
-        playerInfo.money = Math.max(0, playerInfo.money - 7);
-        console.log(playerInfo.money);
-        console.log("The player will skip");
-        shop();
-        break;
-      }
+  while (true) {
+    if (fightOrSkip()) {
+      break;
     }
 
     enemies.health = Math.max(0, enemies.health - playerInfo.attack); // It will return whatever is the highest number, and 0 always being a choice it will never go down to the negatives
@@ -98,6 +119,7 @@ let startGame = function (playerInfo, enemies) {
   for (i = 0; i < enemies.length; i++) {
     if (playerInfo.health > 0) {
       alert(`Let the battle begin! Round ${i + 1}`);
+
       let currentEnemy = enemies[i];
 
       enemies[i].health = randomNumber(60, 40);
