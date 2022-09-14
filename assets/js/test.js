@@ -75,7 +75,8 @@ let fightOrSkip = function () {
 };
 
 let battle = function (playerInfo, enemies) {
-  while (true) {
+  while (true) { //Having the condition playerInfo > 0 && enemies.health > 0, is redundant. Why? Because that will always be true you and I know it. Even the program knows it. And even when it hits false. There 2 conditions for both out comes when it hits false.
+
     if (fightOrSkip()) {
       break;
     }
