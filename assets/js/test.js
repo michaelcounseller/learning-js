@@ -75,18 +75,37 @@ let fightOrSkip = function () {
 };
 
 let battle = function (playerInfo, enemies) {
-  while (true) { //Having the condition playerInfo > 0 && enemies.health > 0, is redundant. Why? Because that will always be true you and I know it. Even the program knows it. And even when it hits false. There 2 conditions for both out comes when it hits false.
+  while (true) {
+    //Having the condition playerInfo > 0 && enemies.health > 0, is redundant. Why? Because that will always be true you and I know it. Even the program knows it. And even when it hits false. There 2 conditions for both out comes when it hits false.
 
     if (fightOrSkip()) {
       break;
     }
 
-    enemies.health = Math.max(0, enemies.health - playerInfo.attack); // It will return whatever is the highest number, and 0 always being a choice it will never go down to the negatives
-    console.log(
-      `${playerInfo.name} hit ${enemies.name} for ${playerInfo.attack} leaving ${enemies.name} with ${enemies.health}`
-    );
+    let playerTurn = Math.random();
 
-    console.log(enemies.health);
+    if (playerTurn > 0.5) {
+      playerTurn = true;
+    } else {
+      playerTurn = false;
+    }
+
+    if (playerTurn) {
+      enemies.health = Math.max(0, enemies.health - playerInfo.attack); // It will return whatever is the highest number, and 0 always being a choice it will never go down to the negatives
+      console.log(
+        `${playerInfo.name} hit ${enemies.name} for ${playerInfo.attack} leaving ${enemies.name} with ${enemies.health}`
+      );
+    } else {
+      playerInfo.health = Math.max(0, playerInfo.health - enemies.attack); // Same with enemyHealth, the value will never be negative
+      console.log(
+        `${enemies.name} hit ${playerInfo.name} for ${enemies.attack} leaving ${playerInfo.name} with ${playerInfo.health}`
+      );
+    }
+
+    if (playerInfo.health <= 0) {
+      console.log("You have been defeated");
+      break;
+    }
 
     if (enemies.health <= 0) {
       console.log(`${enemies.name} has been defeated`);
@@ -96,19 +115,9 @@ let battle = function (playerInfo, enemies) {
       break;
     }
 
-    playerInfo.health = Math.max(0, playerInfo.health - enemies.attack); // Same with enemyHealth, the value will never be negative
     console.log(
-      `${enemies.name} hit ${playerInfo.name} for ${enemies.attack} leaving ${playerInfo.name} with ${playerInfo.health}`
+      `${playerInfo.name} has ${playerInfo.health}, ${enemies.name} has ${enemies.health} health`
     );
-
-    console.log(playerInfo.health);
-
-    if (playerInfo.health <= 0) {
-      console.log("You have been defeated");
-      break;
-    }
-
-    console.log(playerInfo.health, enemies.health);
   }
 };
 
@@ -165,19 +174,21 @@ let endGame = function () {
 
 let shop = function () {
   let shopOptions = prompt(
-    "Would you like to heal with a POTION or UPGRADE your magical weapoon? Please enter one of the choices: POTION, UPGRADE or LEAVE"
+    "Would you like to UPGRADE your magical weapoon or Heal with a POTION or Leave the shop? Please enter one of the choices: '1' Upgrade attack, '2' Heal with a potion or '3' Leave the shop."
   );
 
+  shopOptions = parseInt(shopOptions);
+
   switch (shopOptions) {
-    case "attack":
+    case 1:
       playerInfo.upgradeAttack();
       console.log(`money ${playerInfo.money}, ${playerInfo.attack}`);
       break;
-    case "potion":
+    case 2:
       playerInfo.upgradeHealth();
       console.log(`money ${playerInfo.money}, ${playerInfo.health}`);
       break;
-    case "leave":
+    case 3:
       break;
     default:
       shop();
